@@ -18,8 +18,16 @@ func main() {
 	muxSSL := http.NewServeMux()
 	muxSSL.HandleFunc("/", handler)
 
-	tlsConfig := &tls.Config{}
+	tlsConfig := &tls.Config{
+		MinVersion:               tls.VersionTLS12,
+		MaxVersion:               tls.VersionTLS13,
+		PreferServerCipherSuites: false,
+		CipherSuites: []uint16{
+			tls.TLS_AES_256_GCM_SHA384,
+		},
+	}
 	tlsConfig.Certificates = make([]tls.Certificate, 1)
+	fmt.Print(tlsConfig.CipherSuites)
 
 	var err error
 	/** to create `certificate` and `private key`
